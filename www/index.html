@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Staff List</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- Custom styles for this template -->
+    <link href="css/navbar-fixed-top.css" rel="stylesheet" />
+    <style>
+      .container {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle collapsed"
+            data-toggle="collapse"
+            data-target="#navbar"
+            aria-expanded="false"
+            aria-controls="navbar"
+          >
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">CSM3031</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li class="dropdown">
+              <a
+                href="#"
+                class="dropdown-toggle"
+                data-toggle="dropdown"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >Dropdown <span class="caret"></span
+              ></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+      <ul id="staff-list" class="list-group"></ul>
+    </div>
+
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+      <div class="footer">
+        <div class="row">
+          <div class="col-md-12">Front End Programming @ 2023</div>
+        </div>
+      </div>
+    </nav>
+
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Make the AJAX call to retrieve staff data
+        $.ajax({
+          url: "https://kerbau.odaje.biz/getstaff.php",
+          type: "GET",
+          dataType: "json",
+          success: function (staffData) {
+            displayStaffList(staffData);
+          },
+          error: function (error) {
+            console.log("Error:", error);
+          },
+        });
+
+        function displayStaffList(staffData) {
+          var staffList = $("#staff-list");
+
+          // Iterate through the staff data
+          for (var i = 1; i < staffData.length; i++) {
+            var staff = JSON.parse(staffData[i]);
+
+            // Create a list item with the email as the text
+            var listItem = $("<li></li>")
+              .addClass("list-group-item")
+              .text(staff.email);
+
+            // Set the employeeNumber as the id of the list item
+            listItem.attr("id", staff.employeeNumber);
+
+            // Add an onclick event to the list item
+            listItem.click(function () {
+              var employeeNumber = $(this).attr("id");
+              window.location.href = "secondpage.html?id=" + employeeNumber;
+            });
+
+            // Append the list item to the staff list
+            staffList.append(listItem);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

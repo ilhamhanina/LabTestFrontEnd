@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Staff Details</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- Custom styles for this template -->
+    <link href="css/navbar-fixed-top.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle collapsed"
+            data-toggle="collapse"
+            data-target="#navbar"
+            aria-expanded="false"
+            aria-controls="navbar"
+          >
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">CSM3031</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li class="dropdown">
+              <a
+                href="#"
+                class="dropdown-toggle"
+                data-toggle="dropdown"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >Dropdown <span class="caret"></span
+              ></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+      <div id="staff-details"></div>
+    </div>
+
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">Front End Programming @ 2023</div>
+        </div>
+      </div>
+    </nav>
+
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Get the employeeNumber from the URL parameters
+        var urlParams = new URLSearchParams(window.location.search);
+        var employeeNumber = urlParams.get("id");
+
+        // Make the AJAX call to retrieve staff details
+        $.ajax({
+          url: "https://kerbau.odaje.biz/getstaffbyid.php?id=" + employeeNumber,
+          type: "GET",
+          dataType: "json",
+          success: function (staffData) {
+            displayStaffDetails(staffData);
+          },
+          error: function (error) {
+            console.log("Error:", error);
+          },
+        });
+
+        $(document).ready(function () {
+          // Get the employeeNumber from the URL parameters
+          var urlParams = new URLSearchParams(window.location.search);
+          var employeeNumber = urlParams.get("id");
+
+          // Make the AJAX call to retrieve staff details
+          $.ajax({
+            url:
+              "https://kerbau.odaje.biz/getstaffbyid.php?id=" + employeeNumber,
+            type: "GET",
+            dataType: "json",
+            success: function (staffData) {
+              displayStaffDetails(staffData);
+            },
+            error: function (error) {
+              console.log("Error:", error);
+            },
+          });
+
+          function displayStaffDetails(staffData) {
+            var staffDetails = $("#staff-details");
+
+            if (staffData[0] === '{"status":1}') {
+              // Staff details found
+              var staff = JSON.parse(staffData[1]);
+
+              // Create a table to display the staff details
+              var table = $("<table></table>").addClass("table");
+              var tbody = $("<tbody></tbody>");
+
+              // Iterate over the staff object and create table rows
+              var attributes = [
+                "employeeNumber",
+                "firstName",
+                "lastName",
+                "officeCode",
+                "extension",
+                "email",
+                "jobTitle",
+                "reportsTo",
+              ];
+              attributes.forEach(function (attribute) {
+                var value = staff[attribute];
+                var row = $("<tr></tr>");
+                var keyCell = $("<td></td>").text(attribute);
+                var valueCell = $("<td></td>").text(value);
+                row.append(keyCell, valueCell);
+                tbody.append(row);
+              });
+
+              table.append(tbody);
+              staffDetails.append(table);
+            } else {
+              // No staff details found
+              staffDetails.text("No staff details found.");
+            }
+          }
+        });
+
+        $(document).ready(function () {
+          // Get the employeeNumber from the URL parameters
+          var urlParams = new URLSearchParams(window.location.search);
+          var employeeNumber = urlParams.get("id");
+
+          // Make the AJAX call to retrieve staff details
+          $.ajax({
+            url:
+              "https://kerbau.odaje.biz/getstaffbyid.php?id=" + employeeNumber,
+            type: "GET",
+            dataType: "json",
+            success: function (staffData) {
+              displayStaffDetails(staffData);
+            },
+            error: function (error) {
+              console.log("Error:", error);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
